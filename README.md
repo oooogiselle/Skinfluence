@@ -14,3 +14,4 @@ In addition to textual analysis, we want to incorporate demographic insights fro
 What it does: So far, scrapes reddit data, preprocess text, and perform sentiment analysis 
 Note: Will require you to set up reddit api authentication 
 Output: `subreddit_data.csv`
+2. The information about the brand's slogan and mission was manually extracted from the brand website. The zip named Brands - Sheet1 contains this. 
