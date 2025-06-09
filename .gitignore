@@ -4,4 +4,4 @@
 *output/
 *data/
 code/credentials.json
-code/token.json
+code/token.json.DS_Store
