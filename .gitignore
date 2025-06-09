@@ -1,2 +1,7 @@
 *.csv
+*.png
 .env
+*output/
+*data/
+code/credentials.json
+code/token.json
