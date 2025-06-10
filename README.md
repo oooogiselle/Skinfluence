@@ -43,7 +43,7 @@ Takes in:
 - Common topic words from LDA modeling from wordcloud
 
 What it does:
-Computes alignment between consumer comments and brand mission statements using two methods: TF-IDF vectorization and SentenceTransformer embeddings. The TF-IDF approach converts each text into numerical vectors based on word importance, while the SentenceTransformer model captures deeper semantic meaning. In both cases, cosine similarity is used to measure alignment, where scores closer to 1 indicate stronger alignment between a comment and its corresponding brand mission.
+- Computes alignment between consumer comments and brand mission statements using two methods: TF-IDF vectorization and SentenceTransformer embeddings. The TF-IDF approach converts each text into numerical vectors based on word importance, while the SentenceTransformer model captures deeper semantic meaning. In both cases, cosine similarity is used to measure alignment, where scores closer to 1 indicate stronger alignment between a comment and its corresponding brand mission.
 
 Outputs:
 - Mean alignment vs brand bar chart
