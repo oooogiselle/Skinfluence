@@ -233,6 +233,7 @@ Skinfluence/
 ## Notes
 
 - Ensure your `.env` file is properly configured with Reddit API credentials (Will share in Slack)
+- The data and output files used in this analysis are available in the following [Google Drive folder](https://drive.google.com/drive/folders/1VYgkBRTadV36eDl3bhuAFxh7K9SxPxSi?dmr=1&ec=wgc-drive-hero-goto).
 - Comment filtering excludes bots, deleted posts, and unrelated brands.
 - Code not directly cited in the final paper may still demonstrate iterative work or exploratory analysis.
 - Visuals are saved in respective folders and used in reporting insights on alignment and sentiment.
