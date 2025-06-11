@@ -1,61 +1,238 @@
-# Project Title: Skinfluence
+# Skinfluence
 
-## Project goals
+## Project Goals
 
-This project will examine customer's perception of both US and Korean beauty products in relation to the brand's stated values and missions. We will analyze reviews from brand specific subreddits to assess the public sentiment and compare this to the brand's slogan to evaluate if customer's perception about the product aligns with how the brands market themselves. By comparing US and Korean brands, we will study the role of cultural differences and stereotypes in shaping consumers perception, looking into the differences in values associated with brands and the differences in how customers reflect their broader cultural ideals and biases of the products.
+This project examines consumer perception of U.S. and Korean skincare brands in relation to each brand's stated mission and values. We analyze sentiment from Instagram captions and Reddit comments to assess whether users echo or diverge from brand-promoted ideals. By comparing U.S. and Korean brands, we investigate how cultural values and stereotypes shape consumer language, sentiment, and brand alignment.
 
-## Order to run
+---
 
-### 1. Sentiment Analysis ([`01_sentiment_analysis/`](01_sentiment_analysis/))
+## Repository Structure
 
-Takes in:
-- Reddit API Credentials
-- Instagram data set on the 10 brands: ([instagram_data_set](data/instagram))
-- Example file: elf_cosmetics.csv
+```
+Skinfluence/
+├── 01_sentiment_analysis/
+│   └── instagram/
+│       ├── 01_clean_instagram_data.ipynb
+│       └── 02_instagram_sentiment_analysis.ipynb
+├── 02_cultural_analysis/
+│   └── 02_sentimentAnalysis.ipynb
+├── 03_alignment_analysis/
+│   └── 01/
+│       └── reddit/
+│           ├── 01_load_brand_data.ipynb
+│           ├── 02_load_reddit_data.ipynb
+│           ├── 03_clean_reddit_data.ipynb
+│           ├── 04_align_reddit_tfidf.ipynb
+│           └── 05_align_reddit_st.ipynb
+├── data/
+│   ├── instagram/
+│   │   └── elf_cosmetics.csv
+│   ├── brand/
+│   │   └── all_brands.csv
+│   └── alignment_analysis/
+│       ├── subreddit_data.csv
+│       └── subreddit_comment_data.csv
+├── output/
+│   ├── sentiment_analysis/
+│   │   ├── sentiment_vs_engagement.png
+│   │   ├── sentiment_distribution_boxplot.png
+│   │   └── hashtag_sentiment_barplot.png
+│   ├── brand_image_analysis/
+│   └── alignment_analysis/
+│       └── tdidf_alignment_score_comparison.png
+├── .env
+└── README.md
+```
 
-What it does:
-- Computes sentiment scores using VADER sentiment analyzer (compound score)
+---
 
-Outputs:
-- Scatter plot with sentiment analysis for brands, and split by is_branded content 
-- Bar plot
-- Network 
-- LDA 
+## Order to Run
 
-### 2. Cultural Analysis (`02_cultural_analysis/`)
+1. [`01_sentiment_analysis/instagram/01_clean_instagram_data.ipynb`](01_sentiment_analysis/instagram/01_clean_instagram_data.ipynb)
+2. [`01_sentiment_analysis/instagram/02_instagram_sentiment_analysis.ipynb`](01_sentiment_analysis/instagram/02_instagram_sentiment_analysis.ipynb)
+3. [`02_cultural_analysis/02_sentimentAnalysis.ipynb`](02_cultural_analysis/02_sentimentAnalysis.ipynb)
+4. [`03_alignment_analysis/01/reddit/01_load_brand_data.ipynb`](03_alignment_analysis/01/reddit/01_load_brand_data.ipynb)
+5. [`03_alignment_analysis/01/reddit/02_load_reddit_data.ipynb`](03_alignment_analysis/01/reddit/02_load_reddit_data.ipynb)
+6. [`03_alignment_analysis/01/reddit/03_clean_reddit_data.ipynb`](03_alignment_analysis/01/reddit/03_clean_reddit_data.ipynb)
+7. [`03_alignment_analysis/01/reddit/04_align_reddit_tfidf.ipynb`](03_alignment_analysis/01/reddit/04_align_reddit_tfidf.ipynb)
+8. [`03_alignment_analysis/01/reddit/05_align_reddit_st.ipynb`](03_alignment_analysis/01/reddit/05_align_reddit_st.ipynb)
 
-Takes in:
-- Instagram data set 
+---
 
-What it does:
-- Performs topic modeling on posts for each brand to identify commonly associated words
-- Extracts and organizes frequently used brand hashtags
-- Maps hashtags and topics to corresponding countries for geographic analysis
+## Project Structure
 
-Outputs:
-- Word Cloud
-- Demograhic chart 
+### 1. Sentiment Analysis (`01_sentiment_analysis/`)
+
+#### Instagram Data Cleaning
+
+**File:** `01_sentiment_analysis/instagram/01_clean_instagram_data.ipynb`
+
+**Takes in:**
+
+- 10 Instagram brand CSVs from `data/instagram/` (e.g., `elf_cosmetics.csv`)
+
+**What it does:**
+
+- Concatenates all Instagram CSVs
+- Applies NLTK-based text preprocessing
+- Adds `brand` column for source tracking
+
+**Outputs:**
+
+- `data/instagram/all_instagram_cleaned.csv` – Cleaned and unified dataset
+
+#### Instagram Sentiment Analysis
+
+**File:** `01_sentiment_analysis/instagram/02_instagram_sentiment_analysis.ipynb`
+
+**Takes in:**
+
+- `all_instagram_cleaned.csv` from previous step
+
+**What it does:**
+
+- Applies VADER sentiment analysis to Instagram captions
+- Compares sentiment across brands and hashtags
+- Visualizes sentiment vs. engagement (likes/views)
+- Includes hashtag-level sentiment breakdown
+- Performs LDA topic modeling on captions
+
+**Outputs:**
+
+- `sentiment_vs_engagement.png`
+- `sentiment_distribution_boxplot.png`
+- `hashtag_sentiment_barplot.png`
+- Topic word list by brand from LDA
+
+---
+
+### 2. Brand Image Analysis (`02_cultural_analysis/`)
+
+**File:** `02_sentimentAnalysis.ipynb`
+
+**Takes in:**
+
+- `data/instagram/all_instagram_cleaned.csv`
+
+**What it does:**
+
+- Performs LDA topic modeling on captions by brand
+- Identifies top 5 topics per brand and extracts top 10 words for each
+
+**Outputs:**
+
+- Topic summaries stored in `output/brand_image_analysis/`
+- Optional: Word clouds or CSVs for visualizing topic structure
+
+---
 
 ### 3. Alignment Analysis (`03_alignment_analysis/`)
 
-Takes in:
-- Reddit/Instagram dataset 
-- Common topic words from LDA modeling from wordcloud
+#### Load Brand Data
 
-What it does:
-- Computes alignment between consumer comments and brand mission statements using two methods: TF-IDF vectorization and SentenceTransformer embeddings. The TF-IDF approach converts each text into numerical vectors based on word importance, while the SentenceTransformer model captures deeper semantic meaning. In both cases, cosine similarity is used to measure alignment, where scores closer to 1 indicate stronger alignment between a comment and its corresponding brand mission.
+**File:** `03_alignment_analysis/01/reddit/01_load_brand_data.ipynb`
 
-Outputs:
-- Mean alignment vs brand bar chart
+**Takes in:**
+
+- Kaggle brand datasets (`data/brand/`)
+
+**What it does:**
+
+- Extracts and deduplicates brand names
+- Compiles full brand list
+
+**Outputs:**
+
+- `data/brand/all_brands.csv`
+
+#### Load Reddit Data
+
+**File:** `03_alignment_analysis/01/reddit/02_load_reddit_data.ipynb`
+
+**Takes in:**
+
+- Reddit API credentials from `.env`
+
+**What it does:**
+
+- Searches multiple subreddits for top posts mentioning brands within the last 5 years
+- Uses `rapidfuzz` to match brand names in post titles
+- Filters out bots and saves top 10 user comments per post
+
+**Outputs:**
+
+- `data/alignment_analysis/subreddit_data.csv`
+
+#### Clean Reddit Data
+
+**File:** `03_alignment_analysis/01/reddit/03_clean_reddit_data.ipynb`
+
+**Takes in:**
+
+- `subreddit_data.csv`
+
+**What it does:**
+
+- Flattens `top_comments` to individual rows
+- Applies text preprocessing
+- Filters out unrelated brand mentions
+
+**Outputs:**
+
+- `data/alignment_analysis/subreddit_comment_data.csv`
+
+#### TF-IDF Alignment
+
+**File:** `03_alignment_analysis/01/reddit/04_align_reddit_tfidf.ipynb`
+
+**Takes in:**
+
+- `subreddit_comment_data.csv`
+- `all_brands_cleaned.csv` containing standardized mission statements
+
+**What it does:**
+
+- Uses `TfidfVectorizer` to convert both comments and brand values into numerical vectors
+- Computes cosine similarity between each comment and its corresponding brand's value
+- Aggregates results to compute per-brand mean and z-scored alignment
+
+**Outputs:**
+
+- `output/alignment_analysis/tdidf_alignment_score_comparison.png` A bar chart of alignment score for each brand divided by brand region
+
+#### Sentence Transformer Alignment
+
+**File:** `03_alignment_analysis/01/reddit/05_align_reddit_st.ipynb`
+
+**Takes in:**
+
+- `subreddit_comment_data.csv`
+- `all_brands_cleaned.csv` containing standardized mission statements
+
+**What it does:**
+
+- Encodes comments and brand values using `SentenceTransformer` (all-MiniLM-L6-v2)
+- Same process as `03_alignment_analysis/01/reddit/04_align_reddit_tfidf.ipynb`, the cosine similarity is computed between semantic embeddings and aggregate result per brand
+- Calculates cosine similarity between semantic embedding
+
+**Outputs:**
+
+- `output/alignment_analysis/tdidf_alignment_score_comparison.png` A bar chart of alignment score for each brand divided by brand region
+
+---
 
 ## Data Sources
 
-- Reddit API 
+- Reddit API
+- Instagram API
 - Brand websites for official mission statements and values
 - Manual data collection for brand categorization
 
+---
+
 ## Notes
 
-- Ensure Reddit API authentication is properly set up before running the sentiment analysis
-- Brand data collection is done manually to ensure accuracy
-- Analysis results are sensitive to the quality of text preprocessing
+- Ensure your `.env` file is properly configured with Reddit API credentials (Will share in Slack)
+- Comment filtering excludes bots, deleted posts, and unrelated brands.
+- Code not directly cited in the final paper may still demonstrate iterative work or exploratory analysis.
+- Visuals are saved in respective folders and used in reporting insights on alignment and sentiment.
